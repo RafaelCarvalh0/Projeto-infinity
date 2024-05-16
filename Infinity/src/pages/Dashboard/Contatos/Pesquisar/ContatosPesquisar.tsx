@@ -109,14 +109,22 @@ export default function Contatos() {
         const request: any = { UserId: userId, ContatoId: id }
         const response = await ContatoController.Excluir(request);
 
-        if (response) {
-            //Força o Grid a ser recarregado!
+        if (response.StatusCode === 200) {
+            setSnack({
+                title: "Concluído",
+                description: "Contato Excluído com sucesso.",
+                colorType: "#1B5E20"
+            });
+
             ref?.current?.click();
         }
         else {
-            alert(`Erro ao Excluir!`);
+            setSnack({
+                title: "Erro",
+                description: "Não foi possivel carregar os contatos!",
+                colorType: "#C62828"
+            });
         }
-
     }
 
 

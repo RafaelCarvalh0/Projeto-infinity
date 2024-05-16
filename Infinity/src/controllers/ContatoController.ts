@@ -6,7 +6,7 @@ import { Contato, ContatoLote, Response } from "./Types";
 
 class ContatoController {
 
-    public static async Buscar(request: Contato): Promise<Array<[]> | any> {
+    public static async Buscar(request: Contato): Promise<Response> {
         try {
             console.log("Controller Buscar")
             console.log(request)
@@ -31,7 +31,7 @@ class ContatoController {
         }
     }
 
-    public static async Salvar(request: Contato/*, navigate: NavigateFunction*/): Promise<boolean | string> {
+    public static async Salvar(request: Contato/*, navigate: NavigateFunction*/): Promise<Response> {
         try {
 
             console.log("Controller Salvar")
@@ -45,18 +45,19 @@ class ContatoController {
 
             const response = await Api.post(`api/Contato/Salvar/`, MaskedRequest);
 
-            if (response) {
-                return true;
-            }
+            const { data } = response;
+
+            const retorno: Response = { StatusCode: response.status, Data: data }
+            return retorno;
 
         } catch (error: any) {
-
-            // ERRO DETALHADO VINDO DA PROCEDURE E TRATADO AQUI
-            return error.response.data.ErroDetalhado.match(/^[^!]+!/)[0];
+            console.log(error)
+            const retorno: Response = { StatusCode: error?.response?.status, Data: error?.response?.data?.ErroDetalhado }
+            return retorno;
         }
     }
 
-    public static async SalvarLista(request: ContatoLote): Promise<string> {
+    public static async SalvarLista(request: ContatoLote): Promise<Response> {
         try {
 
             console.log("Controller Salvar Lista")
@@ -64,18 +65,19 @@ class ContatoController {
 
             const response = await Api.post(`api/Contato/SalvarLista/`, request);
 
-            if (response.status === 200) {
-                return response.data;
-            }
+            const { data } = response;
+
+            const retorno: Response = { StatusCode: response.status, Data: data }
+            return retorno;
 
         } catch (error: any) {
-
-            // ERRO DETALHADO VINDO DA PROCEDURE E TRATADO AQUI
-            return error.response.data.ErroDetalhado.match(/^[^!]+!/)[0];
+            console.log(error)
+            const retorno: Response = { StatusCode: error?.response?.status, Data: error?.response?.data?.ErroDetalhado }
+            return retorno;
         }
     }
 
-    public static async Editar(request: Contato/*, navigate: NavigateFunction*/): Promise<boolean | string> {
+    public static async Editar(request: Contato/*, navigate: NavigateFunction*/): Promise<Response> {
         try {
 
             console.log("Controller Editar")
@@ -90,30 +92,33 @@ class ContatoController {
 
             const response = await Api.post(`api/Contato/Editar/`, MaskedRequest);
 
-            if (response) {
-                return true;
-            }
+            const { data } = response;
+
+            const retorno: Response = { StatusCode: response.status, Data: data }
+            return retorno;
 
         } catch (error: any) {
-
-            // ERRO DETALHADO VINDO DA PROCEDURE E TRATADO AQUI
-            return error.response.data.ErroDetalhado.match(/^[^!]+!/)[0];
+            console.log(error)
+            const retorno: Response = { StatusCode: error?.response?.status, Data: error?.response?.data?.ErroDetalhado }
+            return retorno;
         }
     }
 
-    public static async Excluir(request: { UserId: any, ContatoId: number }/*, navigate: NavigateFunction*/): Promise<boolean | null> {
+    public static async Excluir(request: { UserId: number, ContatoId: number }/*, navigate: NavigateFunction*/): Promise<Response> {
         try {
 
             const response = await Api.delete(`api/Contato/Excluir/${request.UserId}/${request.ContatoId}`);
 
-            if (response.data) {
-                return true;
-            }
+            const { data } = response;
 
-            return null;
+            const retorno: Response = { StatusCode: response.status, Data: data }
+            return retorno;
 
         } catch (error: any) {
-            return null;           
+
+            console.log(error)
+            const retorno: Response = { StatusCode: error?.response?.status, Data: error?.response?.data?.ErroDetalhado }
+            return retorno;           
         }
     }
 

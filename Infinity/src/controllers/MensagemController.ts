@@ -7,14 +7,14 @@ import axios from "axios";
 
 class MensagemController {
 
-    public static async Enviar(request: Mensagem): Promise<Array<[]> | any> {
+    public static async Enviar(request: Mensagem): Promise<Response> {
         try {
             console.log("Controller Enviar")
             console.log(request)
 
             //const base64 = GetBase64Img();
             
-            const response = await Api.post(`wapi/Client/GetChats/${request.ClientId}`)
+            const response = await Api.post(`wapi/Client/SendMessage`, request)
 
             const { data } = response;
 

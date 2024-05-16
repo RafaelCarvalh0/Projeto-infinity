@@ -36,14 +36,14 @@ export default function Mensagens() {
         navigate(ClientesCadastro);
     }
 
-    const initialValues = {
-        nome: '',
-        endereco: '',
-        bairro: '',
-        cidade: '',
-        complemento: '',
-        cel: ''
-    };
+    //const initialValues = {
+    //    nome: '',
+    //    endereco: '',
+    //    bairro: '',
+    //    cidade: '',
+    //    complemento: '',
+    //    cel: ''
+    //};
 
     const validationSchema = Yup.object().shape({
         mensagem: Yup.string()//.min(3, "O Campo deve ter no mínimo 3 caracteres"),
@@ -62,7 +62,7 @@ export default function Mensagens() {
         if (response.StatusCode === 200) {
 
             response.Data.forEach(item => {
-                Celulares.push(item.celular);
+                Celulares.push(`55${item.Celular}@c.us`);
             });
 
             setContatos({
@@ -85,19 +85,12 @@ export default function Mensagens() {
             ClientId: clientId,
             Contatos: contatos,
             Imagem: imagem,
-            Mensagem: values,
+            Mensagem: values.mensagem,
         }
 
         const response = await MensagemController.Enviar(request);
 
-        if (typeof response === 'string') {
-            setSnack({
-                title: "Erro",
-                description: response,
-                colorType: "#C62828"
-            });
-        }
-        else if (typeof response === 'boolean') {
+        if (response.StatusCode === 200) {
             setSnack({
                 title: "Concluído",
                 description: "Mensagem enviada com sucesso!",
@@ -105,7 +98,13 @@ export default function Mensagens() {
             });
             resetForm();
         }
-
+        else {
+            setSnack({
+                title: "Erro",
+                description: response,
+                colorType: "#C62828"
+            });
+        }   
         setSubmitting(false);
     };
 
@@ -167,7 +166,7 @@ export default function Mensagens() {
                 <Header>MENSAGENS</Header>
 
                 <Formik
-                    initialValues={initialValues}
+                    initialValues={{mensagem: ''}}
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                 >

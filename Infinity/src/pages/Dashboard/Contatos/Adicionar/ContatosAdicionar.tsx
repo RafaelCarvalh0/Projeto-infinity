@@ -90,14 +90,7 @@ export default function ContatosAdicionar() {
         if (location?.state === null) {
             const response = await ContatoController.Salvar(values);
 
-            if (typeof response === 'string') {
-                setSnack({
-                    title: "Erro",
-                    description: response,
-                    colorType: "#C62828"
-                });
-            }
-            else if (typeof response === 'boolean') {
+            if (response.StatusCode === 200) {
                 setSnack({
                     title: "Concluído",
                     description: "Contato Inserido com sucesso!",
@@ -105,6 +98,14 @@ export default function ContatosAdicionar() {
                 });
                 resetForm();
             }
+            else {
+                setSnack({
+                    title: "Erro",
+                    description: response,
+                    colorType: "#C62828"
+                });
+            }
+
         }
 
         else if (location?.state !== null) {
@@ -123,19 +124,19 @@ export default function ContatosAdicionar() {
 
         const response = await ContatoController.Editar(request);
 
-        if (typeof response === 'string') {
-            setSnack({
-                title: "Erro",
-                description: response,
-                colorType: "#C62828"
-            });
-        }
-        else if (typeof response === 'boolean') {
-
+        if (response.StatusCode === 200) {
             setSnack({
                 title: "Concluído",
                 description: "Contato Editado com sucesso!",
                 colorType: "#1B5E20"
+            });
+            resetForm();
+        }
+        else {
+            setSnack({
+                title: "Erro",
+                description: response,
+                colorType: "#C62828"
             });
         }
 
@@ -221,18 +222,26 @@ export default function ContatosAdicionar() {
         }
         const response = await ContatoController.SalvarLista(Request);
 
-        if (response !== null) {
+        if (response.StatusCode === 200) {
             setModal({
                 title: "Resultado da extração",
-                description1: response.ContatosInseridos === '0' ? `Você já extraiu todos os contatos desse item!` : 'Contatos extraídos: ' + response.ContatosInseridos,
+                description1: response.Data.ContatosInseridos === '0' ? `Você já extraiu todos os contatos desse grupo!` : 'Contatos extraídos: ' + response.Data.ContatosInseridos,
                 //description2: `Contatos já extraídos: ${response.ContatosExistentes}`,
                 colorType: "#1B5E20"
             });
         }
-        console.log("")
-        console.log("Lista de contatos Extraidos !!!!")
-        console.log(contactsList)
-        console.log("")
+        else {
+            setSnack({
+                title: "Erro",
+                description: response,
+                colorType: "#C62828"
+            });
+        }
+
+        //console.log("")
+        //console.log("Lista de contatos Extraidos !!!!")
+        //console.log(contactsList)
+        //console.log("")
     }
 
     //Upload do arquivo XLSX
