@@ -90,7 +90,7 @@ class ContatoController {
                 Celular: request.Celular.replace(/\(|\)|\s|-/g, "")
             }
 
-            const response = await Api.post(`api/Contato/Editar/`, MaskedRequest);
+            const response = await Api.put(`api/Contato/Editar/`, MaskedRequest);
 
             const { data } = response;
 

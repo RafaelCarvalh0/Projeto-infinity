@@ -138,7 +138,7 @@ namespace Infinity.Api.Controllers.Database
         }
 
 
-        // POST: api/Contato/Editar
+        // PUT: api/Contato/Editar
         /// <summary>
         /// Edita um contato existente.
         /// </summary>
@@ -147,7 +147,7 @@ namespace Infinity.Api.Controllers.Database
         /// <response code="200">Operação realizada com exito</response>
         /// <response code="500">Ocorreu um erro interno</response>
         /// <response code="401">Usuário não autenticado</response>
-        [HttpPost]
+        [HttpPut]
         [Route("[action]")]
         public async Task<ActionResult> Editar(ContatoRequest request)
         {
