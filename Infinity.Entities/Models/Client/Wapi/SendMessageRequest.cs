@@ -6,12 +6,19 @@ using System.Threading.Tasks;
 
 namespace Infinity.Entities.Models.Client.Wapi
 {
+    public class SendMessageWithTextRequest
+    {
+        public string chatId { get; set; }
+        public string contentType { get; set; }
+        public string content { get; set; }
+    }
+
     public class SendMessageWithMediaRequest
     {
         public string chatId {  get; set; }
         public string contentType { get; set; }
         public string content { get; set; }
-        public Options options { get; set; }
+        public Options? options { get; set; }
     }
 
     public class Options

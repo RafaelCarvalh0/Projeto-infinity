@@ -1,4 +1,5 @@
-﻿using Infinity.Api.Services;
+﻿using Infinity.Api.Helper;
+using Infinity.Api.Services;
 using Infinity.Entities.Models.Client;
 using Infinity.Entities.Models.Client.Wapi;
 using Microsoft.AspNetCore.Mvc;
@@ -55,7 +56,7 @@ namespace Infinity.Api.Controllers.Whatsapp
             }
         }
 
-        // POST: wapi/Client/SendMessage
+        // POST: wapi/Client/SendMessageWithMedia
         /// <summary>
         /// Faz o envio de mensagens único ou em lote para a API do Whatsapp.
         /// </summary>
@@ -66,38 +67,18 @@ namespace Infinity.Api.Controllers.Whatsapp
         /// <response code="401">Usuário não autenticado</response>
         [HttpPost]
         [Route("[action]")]
-        public async Task<ActionResult> SendMessage(ClientRequest request)
+        public async Task<ActionResult> SendMessageWithMedia(ClientRequest request)
         {
             try
             {
-                HttpClient client = new HttpClient();
-                byte[] imageBytes = await client.GetByteArrayAsync(request.Imagem);
-                string base64Styring = Convert.ToBase64String(imageBytes);
-
-                var model = new SendMessageWithMediaRequest()
-                {
-                    contentType = "string",
-                    content = request.Mensagem,
-                    options = new Options()
-                    {
-                        media = new Media
-                        {
-                            mimetype = "image/jpeg/png/jpg",
-                            data = base64Styring,
-                            filename = request.Imagem
-                        }
-                    }
-                };
+                SendMessageWithMediaRequest model = await SendMessageHelper.SendMessageWithMediaRequest(request);
 
                 object retorno = null;
                 foreach (var item in request.contatos.celular)
                 {
-                    model.chatId = item;
+                    model.chatId = item; //Receive each cellphone number!
 
-                    var modelSerialized = JsonConvert.SerializeObject(model);
-                    retorno = await _applicationFactory.CallWebService($"client/sendMessage/{request.ClientId}", RequestTypeEnum.POST, modelSerialized);
-
-                    var teste = 1;
+                    retorno = await _applicationFactory.CallWebService($"client/sendMessage/{request.ClientId}", RequestTypeEnum.POST, model);
                 }
 
                 if (retorno is null)
@@ -119,31 +100,5 @@ namespace Infinity.Api.Controllers.Whatsapp
                 });
             }
         }
-
-        //public async Task<SendMessageWithMediaRequest> MontarRequisicao(ClientRequest request)
-        //{
-        //    HttpClient client = new HttpClient();
-
-        //    byte[] imageBytes = await client.GetByteArrayAsync(request.Imagem);
-        //    string base64Styring = Convert.ToBase64String(imageBytes);
-
-        //    var model = new SendMessageWithMediaRequest()
-        //    {
-        //        contentType = "string",
-        //        content = request.Mensagem,
-        //        options = new Options()
-        //        {
-        //            media = new Media
-        //            {
-        //                mimetype = "image/jpeg/png/jpg",
-        //                data = base64Styring,
-        //                filename = request.Imagem
-        //            }
-        //        }
-        //    };
-
-        //    return model;
-
-        //}
     }
 }
