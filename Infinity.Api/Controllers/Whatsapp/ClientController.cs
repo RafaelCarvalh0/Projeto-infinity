@@ -56,7 +56,7 @@ namespace Infinity.Api.Controllers.Whatsapp
             }
         }
 
-        // POST: wapi/Client/SendMessageWithMedia
+        // POST: wapi/Client/SendMessage
         /// <summary>
         /// Faz o envio de mensagens único ou em lote para a API do Whatsapp.
         /// </summary>
@@ -67,17 +67,16 @@ namespace Infinity.Api.Controllers.Whatsapp
         /// <response code="401">Usuário não autenticado</response>
         [HttpPost]
         [Route("[action]")]
-        public async Task<ActionResult> SendMessageWithMedia(ClientRequest request)
+        public async Task<ActionResult> SendMessage(ClientRequest request)
         {
             try
             {
-                SendMessageWithMediaRequest model = await SendMessageHelper.SendMessageWithMediaRequest(request);
+                var model = await SendMessageHelper.SendMessageRequest(request);
 
                 object retorno = null;
                 foreach (var item in request.contatos.celular)
                 {
                     model.chatId = item; //Receive each cellphone number!
-
                     retorno = await _applicationFactory.CallWebService($"client/sendMessage/{request.ClientId}", RequestTypeEnum.POST, model);
                 }
 

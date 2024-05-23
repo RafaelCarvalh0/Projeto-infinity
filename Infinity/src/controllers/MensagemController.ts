@@ -14,7 +14,7 @@ class MensagemController {
 
             //const base64 = GetBase64Img();
             
-            const response = await Api.post(`wapi/Client/SendMessageWithMedia`, request)
+            const response = await Api.post(`wapi/Client/SendMessage`, request)
 
             const { data } = response;
 

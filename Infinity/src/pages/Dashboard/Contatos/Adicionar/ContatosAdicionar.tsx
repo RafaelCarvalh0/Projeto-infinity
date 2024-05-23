@@ -56,8 +56,8 @@ export default function ContatosAdicionar() {
     const { userId, clientId } = useSelector(state => state.Authentication);
 
     const history = createBrowserHistory();
-    const [snack, setSnack] = useState<Snack|any>(null);
-    const [modal, setModal] = useState<Modal|any>(null);
+    const [snack, setSnack] = useState<Snack>(null);
+    const [modal, setModal] = useState<Modal>(null);
 
     //const [value, setValue] = useState('');
 

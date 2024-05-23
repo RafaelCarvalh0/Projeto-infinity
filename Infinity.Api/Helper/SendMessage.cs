@@ -7,41 +7,41 @@ namespace Infinity.Api.Helper
     {
         public static HttpClient client = new HttpClient();
 
-        public static async Task<SendMessageWithTextRequest> SendMessageWithTextRequest(ClientRequest request)
+        public static async Task<dynamic> SendMessageRequest(ClientRequest request)
         {
+            dynamic model;
 
-            var model = new SendMessageWithTextRequest();
-            model.contentType = "string";
-            model.content = request.Mensagem;   
-
-            return model;
-
-        }
-
-        public static async Task<SendMessageWithMediaRequest> SendMessageWithMediaRequest(ClientRequest request)
-        {
-            var model = new SendMessageWithMediaRequest();
-
-            model.contentType = "string";
-            model.content = request.Mensagem;
-
-            if (request.Imagem is not null)
+            if(request.Imagem is not null) 
             {
-                byte[] imageBytes = await client.GetByteArrayAsync(request.Imagem);
-                string base64String = Convert.ToBase64String(imageBytes);
+                model = new SendMessageWithMediaRequest();
 
-                var options = new Options();
-                var media = new Media();
+                model.contentType = "string";
+                model.content = request.Mensagem;
 
-                media.mimetype = "image/jpeg/png/jpg";
-                media.data = base64String;
-                media.filename = request.Imagem;
+                if (request.Imagem is not null)
+                {
+                    byte[] imageBytes = await client.GetByteArrayAsync(request.Imagem);
+                    string base64String = Convert.ToBase64String(imageBytes);
 
-                options.media = media;
+                    var options = new Options();
+                    var media = new Media();
 
-                model.options = options;
+                    media.mimetype = "image/jpeg/png/jpg";
+                    media.data = base64String;
+                    media.filename = request.Imagem;
+
+                    options.media = media;
+
+                    model.options = options;
+                }
             }
-
+            else
+            {
+                model = new SendMessageWithTextRequest();
+                model.contentType = "string";
+                model.content = request.Mensagem;
+            }
+            
             return model;
 
         }

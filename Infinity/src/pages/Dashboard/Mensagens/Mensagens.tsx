@@ -5,7 +5,7 @@ import { BoxButtons, Button, Header } from './MensagensStyle';
 import * as Icon from '@mui/icons-material/';
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { Form, Formik, Field } from "formik";
+import { Form, Formik, Field, useFormik } from "formik";
 import { ClientesCadastro } from '../../../routes/RoutesNames';
 import InputMask from 'react-input-mask';
 import MensagemController from '../../../controllers/MensagemController';
@@ -13,10 +13,19 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import ContatoController from '../../../controllers/ContatoController';
 import { useSelector } from 'react-redux';
+import SnackAlert from '../../Components/AlertComponents/Snack/SnackAlert';
+import ModalAlert from '../../Components/AlertComponents/Modal/ModalAlert';
 
 interface Snack {
     title?: string
     description?: string
+    colorType?: string
+}
+
+interface Modal {
+    title?: string
+    description1: string
+    description2?: string
     colorType?: string
 }
 
@@ -29,29 +38,23 @@ export default function Mensagens() {
     const navigate = useNavigate();
     const { userId, clientId } = useSelector(state => state.Authentication);
     const [contatos, setContatos] = useState<Contatos>();
-    const [snack, setSnack] = useState<Snack | any>(null);
-    const [imagem, setImagem] = useState<any>();
+    const [snack, setSnack] = useState<Snack>(null);
+    const [modal, setModal] = useState<Modal>(null);
+    const [imagem, setImagem] = useState<string>(null);
 
-    const handleNavigation = () => {
-        navigate(ClientesCadastro);
-    }
+    const [visibleButtonLimpar, setVisibleButtonLimpar] = useState<boolean>(false);
 
-    //const initialValues = {
-    //    nome: '',
-    //    endereco: '',
-    //    bairro: '',
-    //    cidade: '',
-    //    complemento: '',
-    //    cel: ''
-    //};
-
-    const validationSchema = Yup.object().shape({
-        mensagem: Yup.string()//.min(3, "O Campo deve ter no mínimo 3 caracteres"),
-    });
+    const initialValues = {
+        mensagem: '' 
+    };
 
     useEffect(() => {
         CarregarContatos();
     }, []);
+
+    const validationSchema = Yup.object().shape({
+        mensagem: Yup.string()//.min(3, "O Campo deve ter no mínimo 3 caracteres"),
+    });
 
     const CarregarContatos = async () => {
 
@@ -86,6 +89,18 @@ export default function Mensagens() {
             Contatos: contatos,
             Imagem: imagem,
             Mensagem: values.mensagem,
+        }
+
+        if (request.Mensagem === '' && request.Imagem === null) {
+
+            setModal({
+                title: "Sem conteúdo",
+                description1: "Você deve inserir uma conteúdo na mensagem (imagem, texto, ou ambos)",
+                //description2: `Contatos já extraídos: ${response.ContatosExistentes}`,
+                colorType: "#1B5E20"
+            });
+
+            return;
         }
 
         const response = await MensagemController.Enviar(request);
@@ -153,6 +168,14 @@ export default function Mensagens() {
 
     };
 
+    const CloseSnack = (): void => {
+        setSnack(null);
+    }
+
+    const CloseModal = (): void => {
+        setModal(null);
+    }
+
     return (
         <Box
             component="form"
@@ -165,12 +188,21 @@ export default function Mensagens() {
             <div style={{ paddingBottom: 30 }}>
                 <Header>MENSAGENS</Header>
 
+                {snack !== null &&
+                    <SnackAlert modalProps={snack} onClose={CloseSnack} />
+                    // <ModalAlert title={showModal.title} description={showModal.description} onClose={CloseModal} />
+                }
+
+                {modal !== null &&
+                    <ModalAlert modalProps={modal} onClose={CloseModal} />
+                }
+
                 <Formik
-                    initialValues={{mensagem: ''}}
+                    initialValues={initialValues}
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
                 >
-                    {({ isSubmitting, errors, handleSubmit }) => (
+                    {({ isSubmitting, errors, handleSubmit, resetForm, setFieldValue }) => (
                         <Form>
 
                             <Box>
@@ -194,7 +226,10 @@ export default function Mensagens() {
                                             Selecionar imagem
                                         </Button>
                                     </label>
-                                </BoxButtons>
+                                    <Button variant="contained" sx={{ display: imagem != null ? '' : 'none' }} onClick={() => { setImagem(null) }} color='error' startIcon={<Icon.Clear />}>
+                                        Excluir imagem
+                                    </Button>
+                                </BoxButtons>                               
                             </Box>
 
                             <Box>
@@ -214,6 +249,12 @@ export default function Mensagens() {
                                 multiline
                                 rows={5}
                                 //maxRows={5}
+                                onInput={(e) => {
+                                    if (e.target.value.length > 0) 
+                                        setVisibleButtonLimpar(true)
+                                    else
+                                        setVisibleButtonLimpar(false)
+                                }}
                                 type="text"
                                 error={Boolean(errors?.mensagem)}
                                 helperText={errors?.mensagem}
@@ -223,7 +264,7 @@ export default function Mensagens() {
                                 <Button type="submit" variant="contained" color='primary' onClick={handleSubmit} startIcon={<Icon.Send />}>
                                     Enviar
                                 </Button>
-                                <Button variant="contained" onClick={handleNavigation} color='error' startIcon={<Icon.Clear />}>
+                                <Button variant="contained" sx={{ display: visibleButtonLimpar ? '' : 'none' }} onClick={() => { setFieldValue('mensagem', ''); setVisibleButtonLimpar(false) }} color='error' startIcon={<Icon.Clear />}>
                                     Limpar
                                 </Button>
                             </BoxButtons>
