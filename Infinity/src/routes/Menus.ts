@@ -39,43 +39,18 @@ export const menus: Menu[] = [
     },
     {
         id: 3,
-        screenName: 'Produtos',
-        screenRoute: path.Produtos,
-        subscreenRoute: path.ProdutosCadastro,
-        icon: Icon.Category,
-        active: true,
-    },
-    {
-        id: 4,
-        screenName: 'Prestação de contas',
-        screenRoute: path.PrestacaoDeContas,
-        subscreenRoute: path.PrestacaoDeContasCadastro,
-        icon: Icon.Paid,
-        active: true,
-    },
-    {
-        id: 5,
-        screenName: 'Recebimentos',
-        screenRoute: 'Recebimentos',
-        subscreenRoute: 'RecebimentosCadastro',
-        icon: Icon.CurrencyExchange,
-        active: true,
-    },
-    {
-        id: 6,
-        screenName: 'Faturamento',
-        screenRoute: 'Faturamento',
-        subscreenRoute: 'FaturamentoCadastro',
-        icon: Icon.AttachMoney,
+        screenName: 'Bot',
+        screenRoute: path.Bot,
+        //subscreenRoute: path.ProdutosCadastro,
+        icon: Icon.ElectricBolt,
         active: true,
     },
     {
         id: 7,
         screenName: 'Logout',
-        screenRoute: 'Logout',
+        screenRoute: path.Login,
         subscreenRoute: '',
         icon: Icon.Logout,
         active: true,
     }
-
 ];

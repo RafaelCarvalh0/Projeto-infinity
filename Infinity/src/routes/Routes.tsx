@@ -3,7 +3,7 @@ import * as path from './RoutesNames';
 import Login from "../pages/Login/Login";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Home from "../pages/Dashboard/Home/Home";
-import Produtos from "../pages/Dashboard/Produtos/Pesquisar/ProdutosPesquisar";
+import Bot from "../pages/Dashboard/Bot/Pesquisar/BotPesquisar";
 import PrestacaoDeContas from "../pages/Dashboard/PrestacaoContas/Pesquisar/PrestacaoContasPesquisar";
 import Contatos from "../pages/Dashboard/Contatos/Pesquisar/ContatosPesquisar";
 import ContatosAdicionar from "../pages/Dashboard/Contatos/Adicionar/ContatosAdicionar";
@@ -22,9 +22,7 @@ const Routes = () => {
                     <Route path={path.Contatos} element={<Contatos />} />
                     <Route path={path.ContatosAdicionar} element={<ContatosAdicionar />} />
                     <Route path={path.Mensagens} element={<Mensagens />} />
-{/*                    <Route path={path.ClientesCadastro} element={<ClientesCadastro />} />*/}
-                    <Route path={path.Produtos} element={<Produtos />} />
-                    <Route path={path.PrestacaoDeContas} element={<PrestacaoDeContas />} />
+                    <Route path={path.Bot} element={<Bot />} />
                 </Route>
 
                 {/* <Route path="/dashboard/clientes/" element={<Clientes />}>

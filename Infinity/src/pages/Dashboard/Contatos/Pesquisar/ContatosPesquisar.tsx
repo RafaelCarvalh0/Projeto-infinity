@@ -112,7 +112,7 @@ export default function Contatos() {
         if (response.StatusCode === 200) {
             setSnack({
                 title: "Concluído",
-                description: "Contato Excluído com sucesso.",
+                description: "Contato excluído com sucesso.",
                 colorType: "#1B5E20"
             });
 

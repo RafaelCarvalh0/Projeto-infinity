@@ -2,9 +2,9 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import ComponentTable from "../../../Components/Table/Index";
-import { Header } from './ProdutosPesquisarStyle';
+import { Header } from './BotPesquisarStyle';
 
-export default function Produtos() {
+export default function Bot() {
   return (
     <Box
       component="form"
@@ -15,7 +15,7 @@ export default function Produtos() {
       autoComplete="off"
     >
       <div style={{paddingBottom: 30}}>
-      <Header>PRODUTOS</Header>
+      <Header>BOT</Header>
         <TextField
           id="outlined-password-input"
           label="Código"

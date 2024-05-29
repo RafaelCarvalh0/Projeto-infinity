@@ -18,7 +18,7 @@ import styled from "styled-components"
 export const Header = styled.h2`
     display: block;
     margin-bottom: 20px;
-    background-Color: #707070;
+    background-Color: #008891;
     color: #F3F3F1; 
     width: 100%; 
     text-Align: center;

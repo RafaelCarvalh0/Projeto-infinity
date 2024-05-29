@@ -95,7 +95,7 @@ export default function Mensagens() {
 
             setModal({
                 title: "Sem conteúdo",
-                description1: "Você deve inserir uma conteúdo na mensagem (imagem, texto, ou ambos)",
+                description1: "Você deve inserir um conteúdo na mensagem (imagem, texto, ou ambos)",
                 //description2: `Contatos já extraídos: ${response.ContatosExistentes}`,
                 colorType: "#1B5E20"
             });

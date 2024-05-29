@@ -6139,12 +6139,17 @@
                   "chatId": {
                     "type": "string",
                     "description": "The Chat id which contains the message",
-                    "example": "6281288888888@c.us"
+                    "example": "5516993792295@c.us"
                   },
                   "messageId": {
                     "type": "string",
                     "description": "Unique whatsApp identifier for the message",
-                    "example": "ABCDEF999999999"
+                    "example": "7196D2A21DA7665F2E9D56F920510959"
+                  },
+                  "reaction": {
+                    "type": "😀",
+                    "description": "Mensagem de resposta",
+                    "example": "😀"
                   }
                 }
               }
@@ -6156,12 +6161,17 @@
                   "chatId": {
                     "type": "string",
                     "description": "The Chat id which contains the message",
-                    "example": "6281288888888@c.us"
+                    "example": "5516993792295@c.us"
                   },
                   "messageId": {
                     "type": "string",
                     "description": "Unique whatsApp identifier for the message",
-                    "example": "ABCDEF999999999"
+                    "example": "7196D2A21DA7665F2E9D56F920510959"
+                  },
+                  "reaction": {
+                    "type": "😀",
+                    "description": "Mensagem de resposta",
+                    "example": "😀"
                   }
                 }
               }
@@ -6238,12 +6248,17 @@
                   "chatId": {
                     "type": "string",
                     "description": "The Chat id which contains the message",
-                    "example": "6281288888888@c.us"
+                    "example": "5516993792295@c.us"
                   },
                   "messageId": {
                     "type": "string",
                     "description": "Unique whatsApp identifier for the message",
-                    "example": "ABCDEF999999999"
+                    "example": "7196D2A21DA7665F2E9D56F920510959"
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "Mensagem de resposta",
+                    "example":  "teste"
                   }
                 }
               }
@@ -6255,12 +6270,17 @@
                   "chatId": {
                     "type": "string",
                     "description": "The Chat id which contains the message",
-                    "example": "6281288888888@c.us"
+                    "example": "5516993792295@c.us"
                   },
                   "messageId": {
                     "type": "string",
                     "description": "Unique whatsApp identifier for the message",
-                    "example": "ABCDEF999999999"
+                    "example": "7196D2A21DA7665F2E9D56F920510959"
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "Mensagem de resposta",
+                    "example": "teste"
                   }
                 }
               }
