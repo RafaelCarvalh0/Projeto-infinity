@@ -38,9 +38,14 @@ const checkIfEventisEnabled = (event) => {
   return new Promise((resolve, reject) => { if (!disabledCallbacks.includes(event)) { resolve() } })
 }
 
+const api = axios.create({
+  baseURL: 'http://localhost:5174'
+})
+
 module.exports = {
   triggerWebhook,
   sendErrorResponse,
   waitForNestedObject,
-  checkIfEventisEnabled
+  checkIfEventisEnabled,
+  api
 }
