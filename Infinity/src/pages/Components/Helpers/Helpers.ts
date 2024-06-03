@@ -53,6 +53,13 @@ export class Helpers {
         return localDate;
     }
 
+    public static ExceptionMessage = (message: string) => {
+
+        const CleanMessage = message.match(/^[^!]*!/)[0];
+        return CleanMessage;
+
+    }
+
 }
 
 

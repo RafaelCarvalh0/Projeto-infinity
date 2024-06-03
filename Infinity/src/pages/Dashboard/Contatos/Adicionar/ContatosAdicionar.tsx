@@ -101,7 +101,7 @@ export default function ContatosAdicionar() {
             else {
                 setSnack({
                     title: "Erro",
-                    description: response,
+                    description: Helpers.ExceptionMessage(response.Data),
                     colorType: "#C62828"
                 });
             }
@@ -130,7 +130,7 @@ export default function ContatosAdicionar() {
                 description: "Contato Editado com sucesso!",
                 colorType: "#1B5E20"
             });
-            resetForm();
+            //resetForm();
         }
         else {
             setSnack({

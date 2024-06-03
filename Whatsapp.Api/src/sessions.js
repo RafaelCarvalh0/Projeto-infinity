@@ -360,7 +360,7 @@ const adicionarContatoAoDatabase = async (message) => {
         })
     } catch (error) {
         console.log('Caiu na excessão !')
-        console.error(error.response.data.ErroDetalhado)
+        console.error(error.response)
     }
 }
 

@@ -53,23 +53,58 @@ namespace Infinity.Api.Services
                         break;
                 }
 
-                var json = await httpResponse.Content.ReadAsStringAsync();
+                var responseJson = await httpResponse.Content.ReadAsStringAsync();
 
-                if (!httpResponse.IsSuccessStatusCode)
+                switch (Convert.ToInt32(httpResponse.StatusCode))
                 {
-                    if ((int)httpResponse.StatusCode >= 400 && (int)httpResponse.StatusCode <= 500)
-                        return null;
+                    case 200:
+                        return responseJson; // Requisição que espera um retorno de um stored procedure
+                        break;
 
-                    throw new Exception("Ocorreu algum erro não esperado!");
+                    case 201 or 204:
+                        return null; // Recurso criado com sucesso ou sem conteúdo de retorno.
+                        break;
+
+                    case 400:
+                        throw new Exception(responseJson);  // Lançamento de erro de uma requisição mal-formada (bad request)
+                        break;
+
+                    case 401:
+                        throw new Exception(responseJson);  // Lançamento de excessão por falta de autenticação
+                        break;
+
+                    case 403:
+                        throw new Exception(responseJson); // Lançamento de excessão por falta de permissão (unauthorized)
+                        break;
+
+                    case 404:
+                        throw new Exception(responseJson); // Lançamento de excessão devido ao recurso solicitado não ser encontrado (not found)
+                        break;
+
+                    case 500:
+                        throw new Exception(responseJson); // Lançamento de excessão por erro interno no servidor (internal server error)
+                        break;
+
+                    default:
+                        throw new Exception(responseJson); // Default
+                        break;
                 }
 
-                else if (json != null && json.Length > 0)
-                {
-                    //var resultCore = JsonConvert.DeserializeObject(json);
-                    return json;
-                }
+                //if (!httpResponse.IsSuccessStatusCode)
+                //{
+                //    if ((int)httpResponse.StatusCode >= 400 && (int)httpResponse.StatusCode <= 500)
+                //        return null;
 
-                return null;
+                //    throw new Exception("Ocorreu algum erro não esperado!");
+                //}
+
+                //else if (json != null && json.Length > 0)
+                //{
+                //    //var resultCore = JsonConvert.DeserializeObject(json);
+                //    return json;
+                //}
+
+                //return null;
 
             }
             catch (Exception ex)
