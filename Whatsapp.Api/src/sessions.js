@@ -271,30 +271,24 @@ const initializeEvents = (client, sessionId) => {
             client.on('message_create', async (message) => {
                 triggerWebhook(sessionWebhook, sessionId, 'message_create', { message })
                 if (setMessagesAsSeen) {
-                    await adicionarContatoAoDatabase(message)
-
-                    const nomeContato = message._data.notifyName
-
                     const chat = await message.getChat()
 
-                    if (chat.isGroup) return null
+                    if (chat.isGroup || message.type.toLowerCase() === 'e2e_notification' || message.body === '' || message.from.includes('@g.us')) {
+                        return null
+                    } else {
+                        await adicionarContatoAoDatabase(message)
 
-                    if (message.type.toLowerCase() === 'e2e_notification') return null
+                        // Verifica se o BOT ja agiu sobre o contato em questão!
+                        // if (respondedMessages.has(message.id.remote)) return null
 
-                    if (message.body === '') return null
+                        console.log(respondedMessages)
 
-                    if (message.from.includes('@g.us')) return null
+                        respondedMessages.add(message.id.remote)
+                        // eslint-disable-next-line quotes
+                        // message.reply(`Saudações ${nomeContato}, esse é um atendimento automático, e não é monitorado por um humano, está passando por fases de testes e logo será disponibilizado.`)
 
-                    if (respondedMessages.has(message.id.remote)) return null
-
-                    console.log(respondedMessages)
-
-                    respondedMessages.add(message.id.remote)
-
-                    // eslint-disable-next-line quotes
-                    // message.reply(`Saudações ${nomeContato}, esse é um atendimento automático, e não é monitorado por um humano, está passando por fases de testes e logo será disponibilizado.`)
-
-                    chat.sendSeen()
+                        chat.sendSeen()
+                    }
                 }
             })
         })
@@ -360,7 +354,7 @@ const adicionarContatoAoDatabase = async (message) => {
         })
     } catch (error) {
         console.log('Caiu na excessão !')
-        console.error(error.response)
+        console.error(error.response.data.ErroDetalhado)
     }
 }
 

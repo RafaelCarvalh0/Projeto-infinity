@@ -87,7 +87,7 @@ export default function Contatos() {
             setSnack({
                 title: "Erro",
                 description: "Não foi possivel carregar os contatos!",
-                colorType: "#1B5E20"
+                colorType: "#C62828"
             });
         }
     };

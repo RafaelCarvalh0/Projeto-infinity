@@ -135,7 +135,7 @@ export default function ContatosAdicionar() {
         else {
             setSnack({
                 title: "Erro",
-                description: response,
+                description: Helpers.ExceptionMessage(response.Data),
                 colorType: "#C62828"
             });
         }
@@ -160,12 +160,21 @@ export default function ContatosAdicionar() {
         const dataRows: any = [];
 
         console.log(response)
+
         if (response.length > 0) {
 
             response.map((item: any) => {
 
-                if (item.isGroup) {
-                   
+                if (item.isGroup && /*!item.groupMetadata.isParentGroup &&*/ !item.groupMetadata.defaultSubgroup) {
+
+                    console.log("")
+                    console.log("")
+                    console.log("CAIU NO IF")
+                    console.log(item.name)
+                    console.log(item.groupMetadata.isParentGroup)
+                    console.log("")
+                    console.log("")
+
                     dataRows.push({
                         BtnExtract: <IconButton onClick={() => selectedGroupToExtract(item.groupMetadata.participants)} aria-label="extract" color='info' title="Extrair"><Icon.Download /></IconButton>,
                         Grupo: item.name,
@@ -173,10 +182,19 @@ export default function ContatosAdicionar() {
                         Status: item.groupMetadata?.restrict === true ? "Restrito" : "Aberto" //Livre
                     });
                 }
+                else if (item.isGroup && item.groupMetadata.isParentGroup === true) {
+                    console.log("")
+                    console.log("")
+                    console.log("CAIU NO ELSE")
+                    console.log(item.name)
+                    console.log(item.groupMetadata.isParentGroup)
+                    console.log("")
+                    console.log("")
+                }
 
             });
 
-            //console.log(dataRows)
+            console.log(dataRows)
             setTableRows(dataRows);
         }
     }
