@@ -275,8 +275,28 @@ const initializeEvents = (client, sessionId) => {
 
                     if (chat.isGroup || message.type.toLowerCase() === 'e2e_notification' || message.body === '' || message.from.includes('@g.us')) {
                         return null
-                    } else {
-                        await adicionarContatoAoDatabase(message)
+                    }
+                    else if (message.type.toLowerCase() === 'chat' && chat.id.server.toLowerCase() !== 'broadcast') {
+
+                        console.log()
+                        console.log()
+                        console.log()
+                        console.log("MESSAGE CREATE")
+                        console.log(message)
+                        console.log()
+                        console.log()
+                        console.log()
+
+                        console.log()
+                        console.log()
+                        console.log()
+                        console.log("CHAT")
+                        console.log(chat)
+                        console.log()
+                        console.log()
+                        console.log()
+
+                        await adicionarContatoAoDatabase(sessionId, message)
 
                         // Verifica se o BOT ja agiu sobre o contato em questão!
                         // if (respondedMessages.has(message.id.remote)) return null
@@ -333,18 +353,19 @@ const initializeEvents = (client, sessionId) => {
         })
 }
 
-const adicionarContatoAoDatabase = async (message) => {
+const adicionarContatoAoDatabase = async (sessionId, message) => {
     try {
         const contato = await message.getContact()
         const numero = contato.number.slice(2)
         const nome = contato.pushname
 
-        // console.log(sessionId)
+        console.log(sessionId)
         console.log(numero)
         console.log(nome)
 
         await api.post('api/Contato/Salvar', {
-            UsuarioId: 3, // sessionId, // Preciso pegar o usuário ID da tabela de usuários para poder inserir o contato dele, tentar usando o SessionId !!!
+            UsuarioId: 0, // sessionId, // Preciso pegar o usuário ID da tabela de usuários para poder inserir o contato dele, tentar usando o SessionId !!!
+            SessionId: sessionId,
             Nome: nome,
             Celular: numero
         }, {

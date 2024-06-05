@@ -46,7 +46,7 @@ namespace Infinity.Data.Repositories
                     type: CommandType.StoredProcedure,
                     new SqlParameter(parameterName: "p_usuario_id", value: Utils.DBNullParse(request.UsuarioId)),
                     new SqlParameter(parameterName: "p_nome", value: Utils.DBNullParse(request.Nome)),
-                    new SqlParameter(parameterName: "p_celular", value: Utils.DBNullParse(request.Celular))
+                    new SqlParameter(parameterName: "p_celular", value: Utils.DBNullParse(request.Celular))                   
                 );
 
                 if(table.Rows.Count > 0)
@@ -78,7 +78,8 @@ namespace Infinity.Data.Repositories
                     type: CommandType.StoredProcedure,
                     new SqlParameter(parameterName: "p_usuario_id", value: Utils.DBNullParse(request.UsuarioId)),
                     new SqlParameter(parameterName: "p_nome", value: Utils.DBNullParse(request.Nome)),
-                    new SqlParameter(parameterName: "p_celular", value: Utils.DBNullParse(request.Celular))
+                    new SqlParameter(parameterName: "p_celular", value: Utils.DBNullParse(request.Celular)),
+                    new SqlParameter(parameterName: "p_session_id", value: Utils.DBNullParse(request.SessionId))
                 );
 
                 return true;

@@ -14,5 +14,8 @@ namespace Infinity.Entities.Models.Contato
         public string Celular { get; set; }
 
         public string ContatoJson { get; set; }
+
+        // Received by whatsapp API to save a number automatically
+        public string SessionId { get; set; }
     }
 }
