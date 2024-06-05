@@ -275,13 +275,11 @@ const initializeEvents = (client, sessionId) => {
 
                     if (chat.isGroup || message.type.toLowerCase() === 'e2e_notification' || message.body === '' || message.from.includes('@g.us')) {
                         return null
-                    }
-                    else if (message.type.toLowerCase() === 'chat' && chat.id.server.toLowerCase() !== 'broadcast') {
-
+                    } else if (message.type.toLowerCase() === 'chat' && chat.id.server.toLowerCase() !== 'broadcast') {
                         console.log()
                         console.log()
                         console.log()
-                        console.log("MESSAGE CREATE")
+                        console.log('MESSAGE CREATE')
                         console.log(message)
                         console.log()
                         console.log()
@@ -290,24 +288,25 @@ const initializeEvents = (client, sessionId) => {
                         console.log()
                         console.log()
                         console.log()
-                        console.log("CHAT")
+                        console.log('CHAT')
                         console.log(chat)
                         console.log()
                         console.log()
                         console.log()
-
-                        await adicionarContatoAoDatabase(sessionId, message)
-
+                       
                         // Verifica se o BOT ja agiu sobre o contato em questão!
-                        // if (respondedMessages.has(message.id.remote)) return null
+                        if (respondedMessages.has(message.id.remote)) return null
 
                         console.log(respondedMessages)
+                        const nomeContato = message._data.notifyName
 
                         respondedMessages.add(message.id.remote)
                         // eslint-disable-next-line quotes
-                        // message.reply(`Saudações ${nomeContato}, esse é um atendimento automático, e não é monitorado por um humano, está passando por fases de testes e logo será disponibilizado.`)
+                        message.reply(`Saudações ${nomeContato}, esse é um atendimento automático, e não é monitorado por um humano, está passando por fases de desenvolvimento e logo será disponibilizado.`)
 
                         chat.sendSeen()
+
+                        await adicionarContatoAoDatabase(sessionId, message)
                     }
                 }
             })
@@ -375,7 +374,7 @@ const adicionarContatoAoDatabase = async (sessionId, message) => {
         })
     } catch (error) {
         console.log('Caiu na excessão !')
-        console.error(error.response.data.ErroDetalhado)
+        //console.error(error.response.data.ErroDetalhado)
     }
 }
 
