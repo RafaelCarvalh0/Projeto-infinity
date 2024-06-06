@@ -90,6 +90,15 @@ builder.Services.AddTransient<Infinity.Data.Repositories.IContatoRepository, Inf
     return new Infinity.Data.Repositories.ContatoRepository(logger, universal, codigoUsuario);
 });
 
+builder.Services.AddTransient<Infinity.Data.Repositories.IBotRepository, Infinity.Data.Repositories.BotRepository>(provider =>
+{
+    var logger = provider.GetRequiredService<ILogger<Infinity.Data.Repositories.BotRepository>>();
+    var universal = provider.GetRequiredService<Infinity.Data.IUniversal>();
+
+    var accessor = provider.GetRequiredService<IHttpContextAccessor>();
+    return new Infinity.Data.Repositories.BotRepository(logger, universal);
+});
+
 // JWT Authentication
 //var secret = builder.Configuration["JWTAuth:Secret"] ?? "dsadmin@promatec.local";
 //var secretBytes = System.Text.Encoding.UTF8.GetBytes(secret);

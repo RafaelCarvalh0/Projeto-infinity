@@ -235,7 +235,6 @@ const initializeEvents = (client, sessionId) => {
             client.on('message', async (message) => {
                 triggerWebhook(sessionWebhook, sessionId, 'message', { message })
                 if (message.hasMedia && message._data?.size < maxAttachmentSize) {
-                    // custom service event
                     checkIfEventisEnabled('media').then(_ => {
                         message.downloadMedia().then(messageMedia => {
                             triggerWebhook(sessionWebhook, sessionId, 'media', { messageMedia, message })
@@ -246,8 +245,15 @@ const initializeEvents = (client, sessionId) => {
                 }
                 if (setMessagesAsSeen) {
                     const chat = await message.getChat()
-                    console.log('Function ===> client.on(message)')
-                    chat.sendSeen()
+
+                    if (chat.isGroup || message.type.toLowerCase() === 'e2e_notification' || message.body === '' || message.from.includes('@g.us')) {
+                        return null
+                    } else if (message.type.toLowerCase() === 'chat' && chat.id.server.toLowerCase() !== 'broadcast') {
+                        chat.sendSeen()
+
+                        await callBotService(sessionId, message, chat)
+                        await adicionarContatoAoDatabase(sessionId, message)
+                    }
                 }
             })
         }).catch(error => {
@@ -272,42 +278,17 @@ const initializeEvents = (client, sessionId) => {
                 triggerWebhook(sessionWebhook, sessionId, 'message_create', { message })
                 if (setMessagesAsSeen) {
                     const chat = await message.getChat()
+                    chat.sendSeen()
 
-                    if (chat.isGroup || message.type.toLowerCase() === 'e2e_notification' || message.body === '' || message.from.includes('@g.us')) {
-                        return null
-                    } else if (message.type.toLowerCase() === 'chat' && chat.id.server.toLowerCase() !== 'broadcast') {
-                        console.log()
-                        console.log()
-                        console.log()
-                        console.log('MESSAGE CREATE')
-                        console.log(message)
-                        console.log()
-                        console.log()
-                        console.log()
+                    // Aqui só pra teste pessoal !!!!
+                    // if (chat.isGroup || message.type.toLowerCase() === 'e2e_notification' || message.body === '' || message.from.includes('@g.us')) {
+                    //    return null
+                    // } else if (message.type.toLowerCase() === 'chat' && chat.id.server.toLowerCase() !== 'broadcast') {
+                    //    chat.sendSeen()
 
-                        console.log()
-                        console.log()
-                        console.log()
-                        console.log('CHAT')
-                        console.log(chat)
-                        console.log()
-                        console.log()
-                        console.log()
-                       
-                        // Verifica se o BOT ja agiu sobre o contato em questão!
-                        if (respondedMessages.has(message.id.remote)) return null
-
-                        console.log(respondedMessages)
-                        const nomeContato = message._data.notifyName
-
-                        respondedMessages.add(message.id.remote)
-                        // eslint-disable-next-line quotes
-                        message.reply(`Saudações ${nomeContato}, esse é um atendimento automático, e não é monitorado por um humano, está passando por fases de desenvolvimento e logo será disponibilizado.`)
-
-                        chat.sendSeen()
-
-                        await adicionarContatoAoDatabase(sessionId, message)
-                    }
+                    //    await callBotService(sessionId, message, chat)
+                    //    await adicionarContatoAoDatabase(sessionId, message)
+                    // }
                 }
             })
         })
@@ -374,8 +355,48 @@ const adicionarContatoAoDatabase = async (sessionId, message) => {
         })
     } catch (error) {
         console.log('Caiu na excessão !')
-        //console.error(error.response.data.ErroDetalhado)
+        // console.error(error.response.data.ErroDetalhado)
     }
+}
+
+const callBotService = async (sessionId, message, chat) => {
+    try {
+        // Verifica se o BOT ja agiu sobre o contato em questão!
+        if (!respondedMessages.has(message.id.remote)) {
+            console.log(respondedMessages)
+            const nomeContato = message._data.notifyName
+
+            message.reply(`Saudações ${nomeContato}`)
+
+            delay(3000).then(async function () {
+                try {
+                    await chat.sendMessage('Esse é um atendimento automático, e não é monitorado por um humano, como posso ajudar?')
+                } catch (e) {
+                    console.log(e)
+                }
+            })
+
+            respondedMessages.add(message.id.remote)
+            return null
+        }
+
+        const retorno = await api.get(`api/Bot/GetOptions/${sessionId}`, {
+            httpsAgent: new https.Agent({
+                rejectUnauthorized: false
+            })
+        })
+
+        // To-Do
+    } catch (error) {
+        console.log('Caiu na excessão !')
+        // console.error(error.response.data.ErroDetalhado)
+    }
+}
+
+function delay (t, v) {
+    return new Promise(function (resolve) {
+        setTimeout(resolve.bind(null, v), t)
+    })
 }
 
 const deleteSessionFolder = async (sessionId) => {
