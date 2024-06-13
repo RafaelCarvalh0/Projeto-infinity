@@ -380,11 +380,11 @@ const callBotService = async (sessionId, message, chat) => {
             return null
         }
 
-        const retorno = await api.get(`api/Bot/GetOptions/${sessionId}`, {
-            httpsAgent: new https.Agent({
-                rejectUnauthorized: false
-            })
-        })
+        // const retorno = await api.get(`api/Bot/GetOptions/${sessionId}`, {
+        //    httpsAgent: new https.Agent({
+        //        rejectUnauthorized: false
+        //    })
+        // })
 
         // To-Do
     } catch (error) {
