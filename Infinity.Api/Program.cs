@@ -10,28 +10,48 @@ using Infinity.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseKestrel(options =>
+{
+    options.ListenAnyIP(4000); // Porta 4000
+});
+
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER")))
+{
+    builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+    builder.Logging.AddEventLog(settings =>
+    {
+        settings.SourceName = "Infinity.Web";
+        settings.LogName = "Infinity";
+    });
+}
+else
+{
+    builder.Logging.ClearProviders();
+    builder.Logging.AddConsole();
+}
+
 builder.Services.AddControllers().AddNewtonsoftJson(x => // Serializador default
 {
     // Fix System.InvalidCastException
     x.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
 });
 
-builder.Logging.ClearProviders();
-builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+//builder.Logging.ClearProviders();
+//builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Logging.AddEventLog(settings =>
-{
-    settings.SourceName = "Infinity.Web";
-    settings.LogName = "Infinity";
+//builder.Logging.AddEventLog(settings =>
+//{
+//    settings.SourceName = "Infinity.Web";
+//    settings.LogName = "Infinity";
 
-    // Create application log in event viewer:
-    // New-EventLog -LogName Promatec -Source Promatec.Web
-});
+//    // Create application log in event viewer:
+//    // New-EventLog -LogName Promatec -Source Promatec.Web
+//});
 
 //Dados na session
 builder.Services.AddDistributedMemoryCache();
@@ -196,10 +216,15 @@ app.UseCors(builder =>
 });
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    //app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Infinity API V1");
+        c.RoutePrefix = string.Empty;
+    });
 }
 
 app.UseHttpsRedirection();

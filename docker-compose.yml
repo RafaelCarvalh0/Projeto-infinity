@@ -1,0 +1,28 @@
+services:
+  # infinity:
+  #   build:
+  #     context: ./Infinity
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "4000:4000"
+  #   depends_on:
+  #     - infinity-api
+  #     - whatsapp-api
+
+  infinity-api:
+    build:
+      context: .
+      dockerfile: Infinity.Api/Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - ConnectionStrings__SQLServer=Server=host.docker.internal; Database=Infinity; User Id=sa; Password=especialista6132;
+
+  whatsapp-api:
+    build:
+      context: ./Whatsapp.Api
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - Whatsapp.Api/.env
