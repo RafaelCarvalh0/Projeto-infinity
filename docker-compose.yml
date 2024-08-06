@@ -1,3 +1,5 @@
+version: '3.8'  # Certifique-se de definir a versão do Docker Compose
+
 services:
   # infinity:
   #   build:
@@ -12,11 +14,13 @@ services:
   infinity-api:
     build:
       context: .
-      dockerfile: Infinity.Api/Dockerfile
+      dockerfile: ./Infinity.Api/Dockerfile
     ports:
       - "4000:4000"
     environment:
-      - ConnectionStrings__SQLServer=Server=host.docker.internal; Database=Infinity; User Id=sa; Password=especialista6132;
+      - ConnectionStrings__SQLServer=Server=sql-server-db; Database=Infinity; User Id=sa; Password=especialista6132; TrustServerCertificate=True;
+    depends_on:
+      - sql-server-db  
 
   whatsapp-api:
     build:
@@ -26,3 +30,12 @@ services:
       - "3000:3000"
     env_file:
       - Whatsapp.Api/.env
+
+  sql-server-db:
+    container_name: sql-server-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "1nF1n1Ty"
+      ACCEPT_EULA: "Y"

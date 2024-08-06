@@ -1,9 +1,9 @@
 # /Infinity.Api/Dockerfile
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 4000
+#EXPOSE 4000
 
-# Adicione esta linha para definir a variável de ambiente
+# Adicione esta linha para definir a variï¿½vel de ambiente
 ENV DOTNET_RUNNING_IN_CONTAINER=true
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build

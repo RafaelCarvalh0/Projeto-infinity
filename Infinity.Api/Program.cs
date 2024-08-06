@@ -207,12 +207,12 @@ var app = builder.Build();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Configuração do middleware CORS
+// Configuraï¿½ï¿½o do middleware CORS
 app.UseCors(builder =>
 {
-    builder.AllowAnyOrigin(); // Permitir solicitações de qualquer origem
-    builder.AllowAnyMethod(); // Permitir solicitações de qualquer método (GET, POST, etc.)
-    builder.AllowAnyHeader(); // Permitir solicitações de qualquer cabeçalho
+    builder.AllowAnyOrigin(); // Permitir solicitaï¿½ï¿½es de qualquer origem
+    builder.AllowAnyMethod(); // Permitir solicitaï¿½ï¿½es de qualquer mï¿½todo (GET, POST, etc.)
+    builder.AllowAnyHeader(); // Permitir solicitaï¿½ï¿½es de qualquer cabeï¿½alho
 });
 
 // Configure the HTTP request pipeline.
